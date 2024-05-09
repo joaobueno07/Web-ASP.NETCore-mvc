@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using SalesWebApp.Data;
 namespace SalesWebApp
 {
     public class Program
@@ -5,6 +8,11 @@ namespace SalesWebApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            string configDb = "server=localhost;userid=root;password=jctbueno17071997@;database=bancoteste";
+
+            builder.Services.AddDbContext<SalesWebAppContext>(options =>
+               options.UseMySql(configDb, ServerVersion.AutoDetect(configDb)));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -26,9 +34,7 @@ namespace SalesWebApp
 
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }
