@@ -5,11 +5,16 @@ using SalesWebApp.Models.Enums;
 
 namespace SalesWebApp.Data
 {
-    public static class SeedingService
+    public class SeedingService
     {
         public static void Seed(IServiceProvider serviceProvider)
         {
-            using (var context = new SalesWebAppContext(serviceProvider.GetRequiredService<DbContextOptions<SalesWebAppContext>>()))
+
+            var service = serviceProvider.GetRequiredService<DbContextOptions<SalesWebAppContext>>();
+
+            SalesWebAppContext context = new SalesWebAppContext(service);
+
+            using (context)
             {
 
                 if(context.Department.Any() || context.Seller.Any() || context.SalesRecord.Any())

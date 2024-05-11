@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SalesWebApp.Data;
+using SalesWebApp.Services;
 
 
 namespace SalesWebApp
@@ -16,19 +17,15 @@ namespace SalesWebApp
             builder.Services.AddDbContext<SalesWebAppContext>(options =>
                options.UseMySql(configDb, ServerVersion.AutoDetect(configDb)));
 
-            //builder.Services.AddScoped<SeedingService>();
-
-            
-
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<SellerService>();
+
 
             var app = builder.Build();
-
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-
                 SeedingService.Seed(services);
             }
 
