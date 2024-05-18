@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SalesWebApp.Services;
 using SalesWebApp.Models;
+using SalesWebApp.Models.ViewModels;
 
 // diretorio Views/Sellers/
 
@@ -9,10 +10,12 @@ namespace SalesWebApp.Controllers
     public class SellersController : Controller
     {
         private readonly SellerService _sellerService;
+        private readonly DepartmentService _departmentService;
 
-        public SellersController(SellerService sellerService)
+        public SellersController(SellerService sellerService, DepartmentService departmentService)
         {
             this._sellerService = sellerService;
+            this._departmentService = departmentService;
         }
 
         // Views/Sellers/Index.cshtml
@@ -25,7 +28,11 @@ namespace SalesWebApp.Controllers
         // Views/Sellers/Create.cshtml
         public IActionResult Create()
         {
-            return View();
+            var departments = _departmentService.FindAll();
+
+            SellerFormViewModel viewModel = new SellerFormViewModel { Departments = departments };
+           
+            return View(viewModel);
         }
 
         [HttpPost]
